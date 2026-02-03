@@ -1,5 +1,6 @@
 import pygame
 from constants import *
+from make_map import *
 
 pygame.init()
 screen = pygame.display.set_mode((800, 600))
@@ -15,6 +16,11 @@ top_left_y = 150
 # verify GAME_MAP data entry
 # print(GAME_MAP)
 assert len(GAME_MAP) - 1 == MAP_SIZE, "Map size and game map don't match"
+
+room_map = generate_map(GAME_MAP, current_room, OUTDOOR_ROOMS)
+for row in room_map:
+    print(row)
+
 
 while running:
 
