@@ -1,4 +1,11 @@
-from constants import MAP_WIDTH, MAP_HEIGHT, MAP_SIZE
+from constants import (
+    MAP_WIDTH,
+    MAP_HEIGHT,
+    MAP_SIZE,
+    DEMO_OBJECTS,
+    TOP_LEFT_X,
+    TOP_LEFT_Y,
+)
 
 
 def get_floor_type(current_room, outdoor_rooms):
@@ -11,7 +18,6 @@ def get_floor_type(current_room, outdoor_rooms):
 def generate_map(game_map, current_room, outdoor_rooms):
     # this function makes the map for the current room,
     # using room data, scenery data and prop data.
-
     global room_map, room_width, room_height, room_name, hazard_map
     global top_left_x, top_left_y, wall_transparency_frame
     room_data = game_map[current_room]
@@ -60,8 +66,54 @@ def generate_map(game_map, current_room, outdoor_rooms):
 
     if current_room <= MAP_SIZE - MAP_WIDTH:  # If room not in bottom row
         if game_map[current_room + MAP_WIDTH][3]:  # If room below has top exit
-            room_map[MAP_HEIGHT - 1][middle_column] = floor_type
-            room_map[MAP_HEIGHT - 1][middle_column - 1] = floor_type
-            room_map[MAP_HEIGHT - 1][middle_column + 1] = floor_type
+            room_map[room_height - 1][middle_column] = floor_type
+            room_map[room_height - 1][middle_column - 1] = floor_type
+            room_map[room_height - 1][middle_column + 1] = floor_type
 
     return room_map
+
+
+##############
+## Explorer ##
+##############
+
+
+def draw_room(game_map, current_room, outdoor_rooms, screen):
+    global room_height, room_width, room_map
+    generate_map(game_map, current_room, outdoor_rooms)
+    screen.fill("black")  # this takes place of the screen.clear command in the book
+
+    for y in range(room_height):
+        for x in range(room_width):
+            image_to_draw = DEMO_OBJECTS[room_map[y][x]]
+            screen.blit(
+                image_to_draw,
+                (
+                    TOP_LEFT_X + (x * 30),
+                    TOP_LEFT_Y + (y * 30) - image_to_draw.get_height(),
+                ),
+            )
+    return
+
+
+def move_rooms(move, current_room):
+    old_room = current_room
+
+    if move == "left":
+        current_room -= 1
+    if move == "right":
+        current_room += 1
+    if move == "up":
+        current_room -= MAP_WIDTH
+    if move == "down":
+        current_room += MAP_WIDTH
+
+    if current_room > 50:
+        current_room = 50
+    if current_room < 1:
+        current_room = 1
+
+    if current_room != old_room:
+        print(f"Entering room: {current_room}")
+
+    return current_room

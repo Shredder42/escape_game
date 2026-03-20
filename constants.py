@@ -57,3 +57,7 @@ FLOOR = pygame.image.load("images/floor.png")
 PILLAR = pygame.image.load("images/pillar.png")
 SOIL = pygame.image.load("images/soil.png")
 DEMO_OBJECTS = [FLOOR, PILLAR, SOIL]
+
+# Drawing rooms
+TOP_LEFT_X = 100
+TOP_LEFT_Y = 150
